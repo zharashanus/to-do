@@ -14,6 +14,11 @@ class User(db.Model):
     password = db.Column(db.String(200))
     tasks = db.relationship('Task', lazy = True)
 
+    def __init__(self,username,email, password):
+        self.username = username
+        self.email = email
+        self.password = password
+
 
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -25,6 +30,23 @@ class Task(db.Model):
 @app.route('/',methods=['GET'])
 def main_page():
     return render_template('main.html')
+
+@app.route('/register', methods=['GET','POST'])
+def register():
+    if request.method == 'GET':
+        return render_template('auth/register.html')
+    else:
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirmPassword')
+
+        if password = confirm_password:
+            user = User(username=username, email=email, password=password)
+            db.session.add(user)
+            db.session.commit()
+
+            return redirect('/login')
 
 
 if __name__ == '__main__':
