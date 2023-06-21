@@ -1,6 +1,8 @@
 from flask import Flask, request, render_template, redirect
 from flask_sqlalchemy import SQLAlchemy
 
+#to run vm =   "C:\Users\zgiba\Desktop\to-do\myenv\Scripts\Activate.ps1"
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
 app.secret_key = 'gK_!CZy=}E8,MM'
