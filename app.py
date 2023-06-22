@@ -1,7 +1,7 @@
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, session
 from flask_sqlalchemy import SQLAlchemy
 
-#to run vm =   "C:\Users\zgiba\Desktop\to-do\myenv\Scripts\Activate.ps1"
+# to run vm =   "C:\Users\zgiba\Desktop\to-do\myenv\Scripts\Activate.ps1"
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
@@ -10,13 +10,13 @@ db = SQLAlchemy(app)
 
 
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    username = db.Column(db.String(40), unique = True)
-    email = db.Column(db.String(100), unique = True)
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(40), unique=True)
+    email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(200))
-    tasks = db.relationship('Task', lazy = True)
+    tasks = db.relationship('Task', lazy=True)
 
-    def __init__(self,username,email, password):
+    def __init__(self, username, email, password):
         self.username = username
         self.email = email
         self.password = password
@@ -26,14 +26,20 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
     status = db.Column(db.Integer)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Colu
+    mn(db.Integer, db.ForeignKey('user.id'))
 
 
-@app.route('/',methods=['GET'])
+def login_required(route):
+    def decorated_route(*args, **kwargs):
+
+
+@app.route('/', methods=['GET'])
 def main_page():
-    return render_template('main.html')
+    return render_template('../templates/main.html')
 
-@app.route('/register', methods=['GET','POST'])
+
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'GET':
         return render_template('auth/register.html')
@@ -43,7 +49,7 @@ def register():
         password = request.form.get('password')
         confirm_password = request.form.get('confirmPassword')
 
-        if password = confirm_password:
+        if password := confirm_password:
             user = User(username=username, email=email, password=password)
             db.session.add(user)
             db.session.commit()
@@ -55,4 +61,3 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True)
-
